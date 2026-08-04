@@ -287,8 +287,8 @@ body{
 #quadroJardim{justify-content:flex-start;padding:0;gap:0}
 #jardimTopo{
   flex:1;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:1.6rem;
-  padding:2.4rem 2.4rem 1rem;
+  align-items:center;justify-content:center;gap:1.15rem;
+  padding:2.2rem 2.4rem .8rem;
 }
 #contador{
   font-size:4.4rem;line-height:1;
@@ -299,12 +299,24 @@ body{
   font-size:.66rem;letter-spacing:.4em;text-transform:uppercase;
   color:var(--nevoa);opacity:.8;
 }
-#fraseJardim,#fraseFinal{
+#fraseJardim,#fraseAmelie,#fraseFinal{
   opacity:0;transition:opacity 1.4s ease;
 }
-#fraseJardim.visivel,#fraseFinal.visivel{opacity:1}
+#fraseJardim.visivel,#fraseAmelie.visivel,#fraseFinal.visivel{opacity:1}
 #fraseJardim{font-size:1.02rem;max-width:20em}
+#fraseAmelie{max-width:22em}
 #fraseFinal{margin-bottom:.4rem}
+#btnRever{
+  position:absolute;
+  bottom:calc(1rem + env(safe-area-inset-bottom));
+  right:.6rem;
+  font-family:var(--serif);
+  font-size:.6rem;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--ouro);background:transparent;border:none;
+  padding:.6rem 1rem;cursor:pointer;
+  opacity:0;transition:opacity 1.4s ease;pointer-events:none;
+}
+#btnRever.visivel{opacity:.6;pointer-events:auto}
 #cenaJardim{
   flex:0 0 52%;
   width:100%;display:block;
@@ -327,6 +339,16 @@ body{
   from{transform:rotate(-2.1deg)}
   to{transform:rotate(2.3deg)}
 }
+/* a orquídea balança bem menos: ela mora dentro de casa */
+.orquidea-vento{
+  transform-box:fill-box;transform-origin:50% 100%;
+  animation:brisa 5.4s ease-in-out infinite alternate;
+}
+@keyframes brisa{
+  from{transform:rotate(-1deg)}
+  to{transform:rotate(1.2deg)}
+}
+.vagalume{animation:tremeluzir 4s ease-in-out infinite}
 
 /* respeita quem prefere menos movimento */
 @media (prefers-reduced-motion:reduce){
@@ -434,8 +456,11 @@ body{
         <!-- corpo entre as torres -->
         <rect x="122" y="330" width="82" height="100"/>
         <!-- roseta -->
-        <circle cx="163" cy="362" r="13" fill="#1c2a45"/>
-        <circle cx="163" cy="362" r="5" fill="#02050b"/>
+        <circle cx="163" cy="362" r="12" fill="#16233c"/>
+        <circle cx="163" cy="362" r="12" fill="none" stroke="#02050b" stroke-width="2.5"/>
+        <path d="M151 362 h24 M163 350 v24 M154.5 353.5 l17 17 M171.5 353.5 l-17 17"
+              stroke="#02050b" stroke-width="1.6"/>
+        <circle cx="163" cy="362" r="3" fill="#02050b"/>
         <!-- casario ao longe -->
         <path d="M0 430 v-36 h24 v-12 h20 v20 h16 v-26 h22 v34 h14 v-16 h12 v36 Z"/>
         <path d="M390 430 v-30 h-20 v-14 h-18 v22 h-14 v-20 h-16 v42 Z"/>
@@ -505,9 +530,11 @@ body{
         </div>
         <p id="contadorLegenda">dias desde a primeira conversa</p>
         <p class="frase" id="fraseJardim">Elas nascem de novo toda vez que você abrir isso aqui.</p>
+        <p class="menor" id="fraseAmelie"></p>
         <p class="menor" id="fraseFinal">Feliz por ter ficado com a chave.</p>
       </div>
-      <svg id="cenaJardim" viewBox="0 0 390 388" preserveAspectRatio="xMidYMax slice" aria-label="jardim de tulipas"></svg>
+      <svg id="cenaJardim" viewBox="0 0 390 388" preserveAspectRatio="xMidYMax slice" aria-label="jardim de tulipas com a orquídea Amelie"></svg>
+      <button id="btnRever" type="button">ver de novo</button>
     </div>
   </section>
 
@@ -524,6 +551,9 @@ const CONFIG = {
   nomeDele: "JORGE",                 // requerente
   nomeDela: "MARIA LUÍSA",           // sempre com S e acento no I
   apelido: "Malu",
+
+  // ---- a orquídea ----
+  nomeOrquidea: "Amelie",             // a orquídea rosa, presente dele, no vaso vietnamita
 
   // ---- o cadeado em Paris ----
   lat: 48.8517,                       // latitude em graus decimais
@@ -713,8 +743,9 @@ function montarCena2(){
     for (let i = 0; i < 4; i++){
       torres.appendChild(el('rect', {x: x + i*9.5, y: topo - 7, width: 5.5, height: 8}));
     }
-    // janelas ogivais escuras (recorte mais claro, discreto)
-    torres.appendChild(el('rect', {x: x + 11, y: topo + 26, width: 12, height: 26, rx: 6, fill: '#101d33'}));
+    // janelas ogivais estreitas, bem discretas
+    torres.appendChild(el('rect', {x: x + 10, y: topo + 30, width: 5, height: 19, rx: 2.5, fill: '#0d1a30'}));
+    torres.appendChild(el('rect', {x: x + 19, y: topo + 30, width: 5, height: 19, rx: 2.5, fill: '#0d1a30'}));
   });
 
   // reflexos na água: dourados sob o cadeado, pálidos no resto
@@ -797,7 +828,7 @@ function textoSentenca(){
 '§',
 'O feito comporta julgamento imediato, ante a convicção já formada por este juízo, que não é imparcial nem pretende vir a ser.',
 '§',
-'Instruem os autos as seguintes provas: (a) o santinho, guardado; (b) a carta de desculpas escrita pela requerida; (c) o cadeado afixado em Paris; (d) a chave correspondente, entregue em solo mineiro; (e) uma orquídea, em vaso.',
+`Instruem os autos as seguintes provas: (a) o santinho, guardado; (b) a carta de desculpas escrita pela requerida; (c) o cadeado afixado em Paris; (d) a chave correspondente, entregue em solo mineiro; (e) a orquídea rosa que atende pelo nome de ${CONFIG.nomeOrquidea}, em vaso vietnamita.`,
 '§',
 'As provas são harmônicas entre si e dispensam perícia. A carta de desculpas demonstra que a requerida reconhece o próprio erro quando ele existe, qualidade rara, essencial à magistratura e indispensável ao afeto. O cadeado, fechado em ponte estrangeira, e a chave, confiada ao requerente, demonstram que a requerida sabia o que fechava e a quem entregava a abertura.',
 '§',
@@ -999,6 +1030,73 @@ function criarTulipa(NS, cor, corClara){
   return g;
 }
 
+// a Amelie: orquídea rosa em vaso vietnamita (porcelana clara, faixa índigo)
+function criarOrquidea(NS){
+  const g = document.createElementNS(NS, 'g');
+  const mk = (pai, tag, attrs) => {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    pai.appendChild(n);
+    return n;
+  };
+
+  // parte que balança de leve: folhas, haste e flores
+  const vivo = document.createElementNS(NS, 'g');
+  vivo.setAttribute('class', 'orquidea-vento');
+
+  // folhas largas de phalaenopsis
+  mk(vivo, 'path', {d:'M0 -30 C -14 -34, -26 -42, -30 -52 C -18 -52, -6 -44, 0 -34 Z', fill:'#40584a'});
+  mk(vivo, 'path', {d:'M0 -30 C 12 -33, 24 -40, 27 -49 C 16 -50, 5 -43, 0 -33 Z', fill:'#35493d'});
+
+  // haste arqueada
+  mk(vivo, 'path', {d:'M2 -32 C 6 -56, 2 -76, -6 -92 C -10 -100, -15 -106, -21 -110',
+                    fill:'none', stroke:'#47604e', 'stroke-width':'2'});
+
+  // uma flor de cinco pétalas com labelo rosa-escuro
+  const flor = (x, y, s) => {
+    const f = document.createElementNS(NS, 'g');
+    f.setAttribute('transform', `translate(${x} ${y}) scale(${s})`);
+    for (let a = 0; a < 5; a++){
+      mk(f, 'path', {d:'M0 0 C -3 -4, -3 -9, 0 -11 C 3 -9, 3 -4, 0 0 Z',
+                     fill: a % 2 ? '#dda9bd' : '#cf93ab',
+                     transform: `rotate(${a*72})`});
+    }
+    mk(f, 'path', {d:'M0 1 C -2.5 3, -2.5 6, 0 7 C 2.5 6, 2.5 3, 0 1 Z', fill:'#a84f74'});
+    mk(f, 'circle', {r:'1.8', fill:'#f2dbe4'});
+    vivo.appendChild(f);
+  };
+  flor(9, -58, 0.9);
+  flor(3, -78, 1);
+  flor(-7, -94, 1);
+  flor(-18, -106, 0.85);
+  // botões ainda fechados na ponta
+  mk(vivo, 'ellipse', {cx:'-24', cy:'-112', rx:'2.2', ry:'3.2', fill:'#b76d8d'});
+  mk(vivo, 'ellipse', {cx:'-28', cy:'-115', rx:'1.6', ry:'2.4', fill:'#9d5a7b'});
+
+  g.appendChild(vivo);
+
+  // terra e vaso vietnamita por cima da base das folhas
+  mk(g, 'ellipse', {cx:'0', cy:'-29', rx:'17', ry:'3', fill:'#161009'});
+  mk(g, 'path', {d:'M-20 -30 L20 -30 C21 -12, 14 -2, 10 0 L-10 0 C-14 -2, -21 -12, -20 -30 Z',
+                 fill:'#d8cfba'});
+  mk(g, 'rect', {x:'-20.5', y:'-31', width:'41', height:'4', rx:'1.5', fill:'#c6bca4'});
+  mk(g, 'rect', {x:'-20', y:'-26.5', width:'40', height:'1', fill:'#c2a05e', opacity:'.65'});
+  // faixa índigo pintada à mão
+  mk(g, 'path', {d:'M-16 -17 q 4 -4 8 0 t 8 0 t 8 0 t 8 0',
+                 fill:'none', stroke:'#3b5b8f', 'stroke-width':'1.6', opacity:'.85'});
+  mk(g, 'circle', {cx:'-9', cy:'-10', r:'1.1', fill:'#3b5b8f', opacity:'.7'});
+  mk(g, 'circle', {cx:'0', cy:'-9', r:'1.1', fill:'#3b5b8f', opacity:'.7'});
+  mk(g, 'circle', {cx:'9', cy:'-10', r:'1.1', fill:'#3b5b8f', opacity:'.7'});
+
+  // plaquinha de jardim botânico
+  const rotulo = mk(g, 'text', {x:'0', y:'14', 'text-anchor':'middle',
+    'font-family':'Georgia,serif', 'font-size':'7.5', 'letter-spacing':'3',
+    fill:'#c2a05e', opacity:'.75'});
+  rotulo.textContent = CONFIG.nomeOrquidea.toUpperCase();
+
+  return g;
+}
+
 function plantarJardim(){
   const NS = 'http://www.w3.org/2000/svg';
   const svg = $('#cenaJardim');
@@ -1025,13 +1123,19 @@ function plantarJardim(){
     ['#8e7fa0','#b0a3c0']    // lilás apagado
   ];
 
-  // posições: mais fundas em cima (menores), mais perto embaixo (maiores)
+  // posições: mais fundas em cima (menores), mais perto embaixo (maiores);
+  // o centro da frente fica livre para o vaso da Amelie
   const posicoes = [];
   for (let i = 0; i < total; i++){
     const prof = Math.random();                       // 0 = fundo, 1 = frente
+    let x = 14 + Math.random()*362;
+    const y = 175 + prof*198 + Math.random()*10;
+    if (y > 316 && Math.abs(x - 195) < 34){
+      x += x < 195 ? -46 : 46;
+      x = Math.max(14, Math.min(376, x));
+    }
     posicoes.push({
-      x: 14 + Math.random()*362,
-      y: 175 + prof*198 + Math.random()*10,
+      x, y,
       s: 0.45 + prof*0.9,
       cor: cores[Math.floor(Math.random()*cores.length)]
     });
@@ -1058,6 +1162,34 @@ function plantarJardim(){
     svg.appendChild(pos);
   });
 
+  // vaga-lumes dourados, bem discretos
+  for (let i = 0; i < 9; i++){
+    const v = el('circle', {
+      cx: (20 + Math.random()*350).toFixed(1),
+      cy: (135 + Math.random()*160).toFixed(1),
+      r: (0.9 + Math.random()*0.8).toFixed(2),
+      fill: '#e6cc93'
+    });
+    v.classList.add('vagalume');
+    v.style.animationDelay = (-Math.random()*6).toFixed(2) + 's';
+    v.style.animationDuration = (3.5 + Math.random()*4).toFixed(2) + 's';
+    svg.appendChild(v);
+  }
+
+  // a Amelie nasce por último, na frente de todas
+  const posOrquidea = document.createElementNS(NS, 'g');
+  posOrquidea.setAttribute('transform', 'translate(195 366) scale(1.12)');
+  const nasceOrquidea = document.createElementNS(NS, 'g');
+  nasceOrquidea.setAttribute('class', 'tulipa-nasce');
+  nasceOrquidea.style.animationDelay = (duracaoPlantio + 500) + 'ms';
+  nasceOrquidea.style.animationDuration = '2.2s';
+  nasceOrquidea.appendChild(criarOrquidea(NS));
+  posOrquidea.appendChild(nasceOrquidea);
+  svg.appendChild(posOrquidea);
+
+  $('#fraseAmelie').textContent =
+    `E a ${CONFIG.nomeOrquidea}, a orquídea rosa do vaso vietnamita, veio morar no meio delas.`;
+
   // contador sobe junto com o plantio
   const alvoContador = $('#contador');
   const inicio = performance.now();
@@ -1069,11 +1201,15 @@ function plantarJardim(){
     else {
       alvoContador.textContent = dias;
       setTimeout(() => $('#fraseJardim').classList.add('visivel'), 900);
-      setTimeout(() => $('#fraseFinal').classList.add('visivel'), 3400);
+      setTimeout(() => $('#fraseAmelie').classList.add('visivel'), 3300);
+      setTimeout(() => $('#fraseFinal').classList.add('visivel'), 5600);
+      setTimeout(() => $('#btnRever').classList.add('visivel'), 7200);
     }
   }
   requestAnimationFrame(passo);
 }
+
+$('#btnRever').addEventListener('click', () => location.reload());
 
 /* ============================================================
    CABEÇALHO DO ATO 3 E PARTIDA

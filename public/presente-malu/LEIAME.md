@@ -11,7 +11,9 @@ dependência externa: todo o desenho é SVG e CSS, todo o texto está no código
 3. **A sentença** — Autos nº 0001-JML/2026, Vara Única dos Afetos, comarca de
    Passos. Datilografada linha a linha (com botão *pular*) e assinada com o dedo.
 4. **O jardim** — nasce uma tulipa para cada dia desde a primeira conversa
-   (2026-06-01). O contador cresce sozinho, para sempre.
+   (2026-06-01). O contador cresce sozinho, para sempre. Por último nasce a
+   **Amelie**, a orquídea rosa no vaso vietnamita, na frente de todas, com a
+   plaquinha dela.
 
 ## Como editar
 
