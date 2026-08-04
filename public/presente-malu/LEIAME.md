@@ -15,16 +15,14 @@ dependência externa: todo o desenho é SVG e CSS, todo o texto está no código
 
 ## Como editar
 
-Abra o `index.html` e procure o bloco `CONFIG` no topo do `<script>` — nomes,
-coordenadas, datas e ajustes estão lá, comentados em português. Nada mais
-precisa ser mexido.
+Abra o `index.html` desta pasta e procure o bloco `CONFIG` no topo do
+`<script>` — nomes, coordenadas, datas e ajustes estão lá, comentados em
+português. Nada mais precisa ser mexido.
 
 ## Como publicar de novo
 
-Dentro desta pasta:
+Este site é publicado pela integração da Vercel com o GitHub, que já está
+ativa no repositório: basta fazer commit e push na branch principal que a
+Vercel publica sozinha. A página fica no caminho `/presente-malu/` do site.
 
-```
-npx vercel --prod
-```
-
-Sem build, sem npm install: é um arquivo estático.
+Sem build, sem npm install: é um arquivo estático dentro da pasta `public/`.
